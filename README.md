@@ -73,3 +73,13 @@ POST       |  /api/inventory
 ## Carpeta repo
 contiene el repositorio necesario para montar docker asi como el compilado del proyecto dll
 
+
+### Instrucciones de ejecucion 
+Para ejecuta el repositorio de docker, se debe posicionar en el fichero repo
+Abrir una terminal en el repositorio y ejecutar el comando 
+´´´
+docker compose up -d
+´´´
+Esto debera ejecutar todo  lo necesario para montar la base ded datos en un repositorio que se crea de docker, y la compilacion y montaje del proyecto de .net 
+para validar su ejecucion cuando termine deberia de ser accesible la ruta http://localhost:5000/swagger/index.html
+Esto debera mostrar los contratos del proyecto api rest.
