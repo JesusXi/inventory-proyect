@@ -70,3 +70,6 @@ Movimientos de inventario
 Método     |   Endpoint
 GET        |  /api/inventory
 POST       |  /api/inventory
+## Carpeta repo
+contiene el repositorio necesario para montar docker asi como el compilado del proyecto dll
+
