@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: inventory-sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SA_PASSWORD}
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $SA_PASSWORD -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  db-init:
+    image: mcr.microsoft.com/mssql-tools:latest
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    volumes:
+      - ./scripts:/scripts
+    environment:
+      DB_NAME: ${APP_DB_NAME}
+      DB_USER: ${APP_DB_USER}
+      DB_PASSWORD: ${APP_DB_PASSWORD}
+      SA_PASSWORD: ${SA_PASSWORD}
+    command: ["bash", "/scripts/init-db.sh"]
+  restart: "no"
+api:
+  build: .
+  container_name: inventory-api
+  ports:
+    - "5000:5000"
+  environment:
+     ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=${APP_DB_NAME};User Id=${APP_DB_USER};Password=${APP_DB_PASSWORD};TrustServerCertificate=True;"
+  depends_on:
+    -sqlserver
+
+volumes:
+  sqlserver_data:

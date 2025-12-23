@@ -1,4 +1,4 @@
-﻿using ProductInventory.Application.Services
+﻿using ProductInventory.Application.Services;
 namespace ProductInventory.Tests.Pass
 {
     public class PassServiceTests
